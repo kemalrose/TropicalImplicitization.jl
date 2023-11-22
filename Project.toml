@@ -1,0 +1,8 @@
+name = "TropicalImplicitization"
+uuid = "e807b272-d4e2-4980-b18f-a67c83c4a2e3"
+authors = ["Simon Telen <simon.telen@mis.mpg.de>"]
+version = "0.1.0"
+
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Oscar = "f1435218-dba5-11e9-1e4d-f1a5fab5fc13"
