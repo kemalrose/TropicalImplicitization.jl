@@ -1,8 +1,17 @@
 name = "TropicalImplicitization"
-uuid = "e807b272-d4e2-4980-b18f-a67c83c4a2e3"
-authors = ["Simon Telen <simon.telen@mis.mpg.de>"]
-version = "0.1.0"
+uuid = "4774b4c2-ad9d-41ec-b6e1-f1e8524627bb"
+authors = ["Kemal Rose"]
+version = "1.0.0-DEV"
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Oscar = "f1435218-dba5-11e9-1e4d-f1a5fab5fc13"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
