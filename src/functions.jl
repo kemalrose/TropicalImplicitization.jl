@@ -1,3 +1,8 @@
+# Authors: Kemal Rose, Bernd Sturmfels and Simon Telen
+# Date: Juli 14, 2023
+# Short description: This code accompanies the paper
+# "Tropical Implicitization Revisited" by Kemal Rose, Bernd Sturmfels and Simon Telen
+# arXiv: ...
 
 
 # Computes the stable intersection of inner normal fans of polytopes.
@@ -146,12 +151,12 @@ function get_aux_data(cone_list, weight_list)
     d = dim(cone_list[1])
 
 
-    Ssq = MatrixSpace(QQ, n, n)
+    Ssq = matrix_space(QQ, n, n)
 
     E = Matrix{Int64}(identity_matrix(ZZ, n))
 
     Γ = fill(zero(Ssq),length(cone_list),n)
-    dets = fill(zero(fmpq),length(cone_list),n)
+    dets = fill(zero(QQFieldElem),length(cone_list),n)
     RR = []
     Fσ = []
     for j in 1:length(cone_list)
@@ -174,7 +179,7 @@ function get_aux_data(cone_list, weight_list)
         fcts = collect(Oscar.facets(sigma))
 
         fctmtx = convert(Array{Int64,2},numerator.(transpose(hcat([Oscar.normal_vector(f) for f ∈ fcts]...))))
-        T = MatrixSpace(QQ,size(fctmtx)...)
+        T = matrix_space(QQ,size(fctmtx)...)
         RR = push!(RR,Rσ)
         Fσ = push!(Fσ,T(fctmtx))
     end
@@ -211,7 +216,7 @@ end
 # is_interiour    incidence Matrix of intersections w+pos(e_i) ∩ interior(sigma). Here sigma is a maximal cone in the tropical cycle, 1 ≤ i ≤ n.
 function cone_containments(w, data)
 
-    w_mat = MatrixSpace(QQ,data.n,1)(w)
+    w_mat = matrix_space(QQ,data.n,1)(w)
     n = data.n
     is_contained = zeros(Int64,n, size(data.Γ, 1))
     is_in_face = zeros(Int64, n, size(data.Γ, 1))
@@ -272,7 +277,7 @@ function get_tropical_cycle(newton_pols::Vector)
         push!(new_vert_list[i],ei)
     end
     A = transpose(hcat(basis_vecs...))
-    A = MatrixSpace(ZZ, size(A)...)(A)
+    A = matrix_space(ZZ, size(A)...)(A)
     pol_list = convex_hull.(new_vert_list)
     cone_list, weight_list = stable_inters(pol_list)
     resulting_cones, resulting_weights = project_tropical_variety(cone_list, weight_list, A)
@@ -360,7 +365,7 @@ end
 function getVertex(w, data)
     n = data.n
 
-    monomial = zeros(fmpq,n)
+    monomial = zeros(QQFieldElem,n)
     is_contained, is_in_face = cone_containments(w, data)
     is_generic = sum(is_in_face) == 0
 
@@ -435,12 +440,12 @@ julia> cone_list, weight_list = get_trop_A_disc(A)
 """
 function get_trop_A_disc(A)
     d, n = size(A)
-    S = MatrixSpace(ZZ, d, n)
+    S = matrix_space(ZZ, d, n)
     B = nullspace(S(A))[2]
     B = Array(B)
     linear_space_mat =  [B  zeros(Int64, n, d);  zeros(Int64, d, n-d) LinearAlgebra.I[1:d, 1:d]]
     projection_mat = [LinearAlgebra.I[1:n, 1:n] transpose(A)]
-    projection_mat = MatrixSpace(ZZ, size(projection_mat)...)(projection_mat)
+    projection_mat = matrix_space(ZZ, size(projection_mat)...)(projection_mat)
     get_cones_and_mults_from_lin_space_and_proj(linear_space_mat, projection_mat)
 end
 
@@ -457,10 +462,10 @@ function get_cones_and_mults_from_lin_space_and_proj(linear_space_mat, projectio
     ΣB = Polymake.tropical.matroid_fan{min}(matroid)
     rayMat = ΣB.RAYS
     rayMat = convert(Array{Int64,2},rayMat)
-    rayMat = MatrixSpace(QQ,size(rayMat)...)(rayMat)
+    rayMat = matrix_space(QQ,size(rayMat)...)(rayMat)
     lineality = ΣB.LINEALITY_SPACE
     lineality = convert(Array{Int64,2},lineality)
-    lineality = MatrixSpace(QQ,size(lineality)...)(lineality)
+    lineality = matrix_space(QQ,size(lineality)...)(lineality)
     lineality = vcat(lineality, -lineality)[:,2:end]
     maxpols = ΣB.MAXIMAL_POLYTOPES
     cone_list = []
@@ -510,12 +515,12 @@ end
 function homogenize_tropical_cycle(cone_list, weight_list)
     n = ambient_dim(cone_list[1])
     #lin_space = hcat(ones(Int64,n+1), -ones(Int64,n+1))
-    #lin_space = MatrixSpace(ZZ,size(line_space)...)(lin_space)
+    #lin_space = matrix_space(ZZ,size(line_space)...)(lin_space)
     resulting_cone_list = []
     resulting_weight_list = weight_list
     for sigma in cone_list
         ray_list = get_cone_rays(sigma)
-        zero_vec = zero(MatrixSpace(ZZ, 1 , size(ray_list,2)))
+        zero_vec = zero(matrix_space(ZZ, 1 , size(ray_list,2)))
         ray_list = vcat(zero_vec, ray_list)
         sigma_new = positive_hull(transpose(ray_list))
         push!(resulting_cone_list, sigma_new)
@@ -586,7 +591,7 @@ julia> mons, coeffs = compute_A_discriminant(A, Delta, Fld);
 ```
 """
 function compute_A_discriminant(A, Delta, Fld)
-    A_Oscar = MatrixSpace(ZZ, size(A)...)(A)
+    A_Oscar = matrix_space(ZZ, size(A)...)(A)
     (d,n) = size(A)
     B = Array(nullspace(A_Oscar)[2])
     println("Collect all lattice points.")
@@ -595,14 +600,14 @@ function compute_A_discriminant(A, Delta, Fld)
     n_samples = round(length(mons)*1.2)
     println("Sample $n_samples points from Discriminant")
     for j in 1:n_samples
-        v = fmpz.(rand(-50:50,n-d))
-        λ = fmpz.(rand(-50:50,d))
+        v = ZZRingElem.(rand(-50:50,n-d))
+        λ = ZZRingElem.(rand(-50:50,d))
         pt = horn_param(A, B, v, λ)
 
         push!(pts,pt)
     end
     println("Construct Vandermonde matrix.")
-    Mat_Space = Oscar.MatrixSpace(Fld, length(pts), length(mons))
+    Mat_Space = Oscar.matrix_space(Fld, length(pts), length(mons))
     Vand = zero(Mat_Space)
     for i in 1:length(pts)
       Vand[i, :] = [prod(pts[i].^convert(Vector{ZZRingElem}, mon)) for mon in mons]
@@ -660,9 +665,8 @@ function get_vandermonde_matrix(B,P)
         V[i, :] = [prod(pts[i].^mon) for mon in mons]
         #V[i, :] = V[i, :]/norm(V[i, :])
     end
-    V = MatrixSpace(QQ, size(V)...)(V)
+    V = matrix_space(QQ, size(V)...)(V)
     V
 end
-
 
 
