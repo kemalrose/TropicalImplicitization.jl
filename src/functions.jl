@@ -72,7 +72,7 @@ function general_mixed_vol(vert_lists)
     projection_matrix = U[1:d,:]
     revealed_face_verts_projected = [[projection_matrix*collect(vert) for vert in verts] for verts in vert_lists]
     revealed_faces = convex_hull.(revealed_face_verts_projected)
-    vol = QQ(Polymake.polytope.mixed_volume( [ pol.pm_polytope for pol in revealed_faces ]...  ))
+    vol = QQ(Oscar.Polymake.polytope.mixed_volume( [ pol.pm_polytope for pol in revealed_faces ]...  ))
     @assert denominator(vol) == 1
     vol = numerator(vol)
     vol
@@ -458,8 +458,8 @@ end
 # cone_list             a list of polyhedral cones. Need not form a fan.
 # weight_list           a list of integer multiplicities. The balancing condition is satisfied.
 function get_cones_and_mults_from_lin_space_and_proj(linear_space_mat, projection_mat)
-    matroid = Polymake.matroid.Matroid(VECTORS = Matrix{Int64}(linear_space_mat))
-    ΣB = Polymake.tropical.matroid_fan{min}(matroid)
+    matroid = Oscar.Polymake.matroid.Matroid(VECTORS = Matrix{Int64}(linear_space_mat))
+    ΣB = Oscar.Polymake.tropical.matroid_fan{min}(matroid)
     rayMat = ΣB.RAYS
     rayMat = convert(Array{Int64,2},rayMat)
     rayMat = matrix_space(QQ,size(rayMat)...)(rayMat)
