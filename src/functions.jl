@@ -329,7 +329,8 @@ end
 # monomials         the vertices of a polytope
 function newton_pol(data::tropical_sampling_data)
     n = data.n
-    V_ambient = sampleRandom(data, 2*n)
+    cubeverts = [[entry.num for entry in vert] for vert in vertices(cube(n))]
+    V_ambient = unique!([getVertex(-w, data) for w in cubeverts])
 
     function getV(w)
         vtx = getVertex(-w, data)
