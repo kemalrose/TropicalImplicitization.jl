@@ -363,21 +363,30 @@ end
 # data              an object of type "tropical_sampling_data" representing a tropical cycle of codimension one
 # -------------  Output:
 # monomials         the extremal vertex of P in direction w
+
 function getVertex(w, data)
     n = data.n
 
+    generization_step = 0
     monomial = zeros(QQFieldElem,n)
     is_contained, is_in_face = cone_containments(w, data)
     is_generic = sum(is_in_face) == 0
 
-    if !(is_generic)
+    if !(is_generic) 
+        generization_step += 1
 
-        w_new = 5000 * w + rand(-100:100, n)
+        w_new = 50000 * w + rand(-100:100, n)
         is_contained_new, is_in_face_new = cone_containments(w_new, data)
-        while sum((is_contained_new - is_contained).>0) != 0
-            w_new = 20000 * w + rand(-1000:1000, n)
+        
+        while (sum(is_in_face_new) != 0)  && generization_step < 20
+            w_new = 50000 * w + rand(-100:100, n)
             is_contained_new, is_in_face_new = cone_containments(w_new, data)
         end
+
+        if generization_step == 100 
+            println("Warning: couldn't find a generic weight vector!")
+        end
+
         is_contained = is_contained_new
     end
 
@@ -390,8 +399,10 @@ function getVertex(w, data)
             end
         end
     end
+    
     monomial
 end
+
 
 
 # Construct a Newton polytope from a tropical codimension one cycle
