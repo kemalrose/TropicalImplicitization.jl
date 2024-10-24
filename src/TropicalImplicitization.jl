@@ -8,7 +8,7 @@ module TropicalImplicitization
 
 using Oscar, LinearAlgebra
 
-export get_trop_A_disc, get_polytope_from_cycle, compute_A_discriminant, get_dual_fan_of_chow_polytope, get_tropical_cycle, get_vandermonde_matrix, sample, get_chow_fan, get_aux_data, getVertex
+export get_trop_A_disc, get_polytope_from_cycle, compute_A_discriminant, get_dual_fan_of_chow_polytope, get_tropical_cycle, get_vandermonde_matrix, sample, get_chow_fan, get_aux_data, getVertex,  compute_polar_degrees, get_trop_con_Var, extract_polar_degrees
 include("functions.jl")
 
 end
