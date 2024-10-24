@@ -257,8 +257,6 @@ end
 
 A = [1 1 1 1 1 1; 0 1 0 1 0 1; 0 0 1 1 0 0; 0 0 0 0 1 1]
 cone_list, weight_list = get_trop_con_Var(A)
-dim.(cone_list)
-
 extract_polar_degrees(cone_list, weight_list)
 
 compute_polar_degrees(A)

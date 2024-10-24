@@ -844,7 +844,7 @@ function get_inters_multiplicities(data, indices_linear_spaces, cone_list, weigh
             lattice_mult_mat[i, j] = lattice_mult
 
             if lattice_mult != 0
-                x = Array(Oscar.solve(lattice_mtx, w))
+                x = Array(Oscar.solve(lattice_mtx, w; side =:right))
                 if all(x[d+1:n] .≥ 0)
                     vector = data.RR[i]*x[1:d]
                     #@assert vector in cone_list[i]
