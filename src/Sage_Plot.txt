@@ -1,0 +1,155 @@
+# the two lines below are for emacs, ignore them
+# M-x ansi-term RET /bin/sh RET
+# M-x isend RET *ansi-term* RET
+
+x = var('x');
+y = var('y');
+z = var('z');
+
+# equation of the data locus
+DLST(x,y,z) = y^2-x*z; #2nd order ED data locus of the rational normal cubic in PP3, wrt Euclidean metric (affine chart x_0 = 1)
+
+# curve on the variety
+a1(t) = t^2;
+a2(t) = t^3;
+a3(t) = t^4;
+
+
+
+# now we sample points on the cubic, at equal distance using arc length
+da1(t) = a1.derivative(t);
+da2(t) = a2.derivative(t);
+da3(t) = a3.derivative(t);
+
+# Data curve
+u1(t) = t^2 + (-4+3*t/20)*t^(3)/2;
+u2(t) = t^3 + (4-2*t/20)*t^(2)/2;
+u3(t) = t^4 + (1)*t^(1)/2;
+
+#  we sample points on the data curve
+du1(t) = u1.derivative(t);
+du2(t) = u2.derivative(t);
+du3(t) = u3.derivative(t);
+
+
+arc_length = fast_callable(sqrt(da1(t)**2 + da2(t)**2 + da3(t)**2), vars=(t,), domain=RR);
+
+total_length = 0.0;
+tmin1 = 0.25;
+tmax1 = 1.2;
+tmin2 = 0.25;
+tmax2 = 1.1;
+ 
+
+smax1 = 3^(1/4)
+smax2 = 3^(1/5)
+
+F = Graphics();
+F += implicit_plot3d(DLST, (x,-3,3), (y,-3,3), (z,-3,3), plot_points=150, color = Color('#2DE1FC'), opacity = 0.8);
+
+F += parametric_plot3d((a1(t),a2(t),a3(t)), (t,tmin1,smax1), color='red', radius=0.02);
+
+F += parametric_plot3d((u1(t),u2(t),u3(t)), (t,tmin2,smax2), color='green', radius=0.02);
+#F += point3d([W[i] for i in range(nb_pts)], color='black', size=2);
+
+
+
+# this creates a static image, if you want to move it around use F.show(viewer='threejs')
+F.show( 
+        viewer='threejs',
+        #viewer='tachyon',
+        antialiasing=True,
+        figsize=[10,10], # the image resolution is 100*figsize,
+        zoom=2,
+        camera_position=[4,5,2],
+        light_position=(4, 4, 0),
+        frame=False
+       )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# the two lines below are for emacs, ignore them
+# M-x ansi-term RET /bin/sh RET
+# M-x isend RET *ansi-term* RET
+
+x = var('x');
+y = var('y');
+z = var('z');
+
+# equation of the data locus
+DLST(x,y,z) = -x+2*y-z
+
+# rational cubic
+a1(t) = t*2;
+a2(t) = t*3;
+a3(t) = t*4;
+
+
+# now we sample points on the cubic, at equal distance using arc length
+da1(t) = a1.derivative(t);
+da2(t) = a2.derivative(t);
+da3(t) = a3.derivative(t);
+
+# Data curve
+u1(t) = 4 * t
+u2(t) = 3 * t
+u3(t) = 4 * t
+
+#  we sample points on the data curve
+du1(t) = u1.derivative(t);
+du2(t) = u2.derivative(t);
+du3(t) = u3.derivative(t);
+
+
+arc_length = fast_callable(sqrt(da1(t)**2 + da2(t)**2 + da3(t)**2), vars=(t,), domain=RR);
+
+total_length = 0.0;
+tmin1 = -3/4;
+tmax1 = 3/4;
+tmin2 = -3/4;
+tmax2 = 3/4;
+ 
+
+smax1 = 3/4
+smax2 = 3/4
+
+F = Graphics();
+F += implicit_plot3d(DLST, (x,-3,3), (y,-3,3), (z,-3,3), plot_points=150, color = Color('#2DE1FC'), opacity = 0.8);
+
+F += parametric_plot3d((a1(t),a2(t),a3(t)), (t,tmin1,smax1), color='red', radius=0.02);
+
+F += parametric_plot3d((u1(t),u2(t),u3(t)), (t,tmin2,smax2), color='green', radius=0.02);
+#F += point3d([W[i] for i in range(nb_pts)], color='black', size=2);
+
+
+
+# this creates a static image, if you want to move it around use F.show(viewer='threejs')
+F.show( 
+        viewer='threejs',
+        #viewer='tachyon',
+        antialiasing=True,
+        figsize=[10,10], # the image resolution is 100*figsize,
+        zoom=2,
+        camera_position=[4,5,2],
+        light_position=(4, 4, 0),
+        frame=False
+       )
