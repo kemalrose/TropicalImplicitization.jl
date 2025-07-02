@@ -763,7 +763,7 @@ function extract_polar_degrees(cone_list, weight_list)
 
         w = matrix_space(QQ, n, 1)(rand(-100000:100000, n))
 
-        does_intersect_mat, lattice_mult_mat, total = get_inters_multiplicities(data, indices_linear_spaces, cone_list, weight_list, w)
+        does_intersect_mat, lattice_mult_mat, total = get_inters_multiplicities_linear_spaces(data, indices_linear_spaces, cone_list, weight_list, w)
         push!(pdeg_list, total)
     end
     pdeg_list
@@ -784,7 +784,6 @@ function get_simplicial_inters_data(cone_list, weight_list)
 
     n = ambient_dim(cone_list[1])
     d = dim(cone_list[1])
-    @assert 2*d == n
 
     RR = []
     Fσ = []
@@ -812,7 +811,7 @@ end
 
 
 
-function get_inters_multiplicities(data, indices_linear_spaces, cone_list, weight_list, w)
+function get_inters_multiplicities_linear_spaces(data, indices_linear_spaces, cone_list, weight_list, w)
     n = data.n
     d = data.d
     n_cones_from_var = data.n_cones
