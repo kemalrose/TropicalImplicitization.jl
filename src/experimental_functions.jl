@@ -76,44 +76,8 @@ end
 
 
 
-function extract_polar_degrees(cone_list, weight_list)
-    data = get_simplicial_inters_data(cone_list, weight_list)
-    @assert(data.n % 2 == 0)
-    affineAmbientDimension = div(data.n, 2)
-    projectiveDimensionOfConormalVariety = data.d - 2
-
-    n = data.n
-    d = data.d
-    pdeg_list = Array{Int64}([])
-
-    for polar_index in 0:projectiveDimensionOfConormalVariety
-        projectiveDimLinSpace1 = affineAmbientDimension-1-polar_index
-        projectiveDimLinSpace2 = 2*(affineAmbientDimension-1) - projectiveDimLinSpace1 - projectiveDimensionOfConormalVariety
-        inds1 = collect(combinations(1:affineAmbientDimension, projectiveDimLinSpace1))
-        inds2 = collect(combinations(affineAmbientDimension+1:2*affineAmbientDimension, projectiveDimLinSpace2))
-
-        indices_linear_spaces = []
-        for ind_list1 in inds1 
-            for ind_list2 in inds2  
-                current_inds = []
-                append!(current_inds, ind_list1)
-                append!(current_inds, ind_list2)
-                push!(indices_linear_spaces, current_inds)
-            end
-        end
-
-        w = matrix_space(QQ, n, 1)(rand(-100000:100000, n))
-
-        does_intersect_mat, lattice_mult_mat, total = get_inters_multiplicities_linear_spaces(data, indices_linear_spaces, cone_list, weight_list, w)
-        push!(pdeg_list, total)
-    end
-    reverse(pdeg_list)
-end
-
-
-
 function get_inters_multiplicities_linear_spaces(data, indices_linear_spaces, cone_list, weight_list, w)
-    n = data.n
+    n = data.nß
     d = data.d
     n_cones_from_var = data.n_cones
     n_cones_from_lin = length(indices_linear_spaces)
